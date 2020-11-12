@@ -1,5 +1,6 @@
 package br.senac.tads.dsw.crudusuario.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public class Cliente {
     private boolean status;
     
     @OneToMany
-    private List<Papel> papeis;
+    private List<Papel> papeis = new ArrayList<>();
     private Date dataCadastro;
 
     public Cliente() {
