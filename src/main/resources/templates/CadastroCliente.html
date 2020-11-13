@@ -1,0 +1,91 @@
+<html layout:decorate="~{modelo}">
+<head>
+<meta charset="UTF-8" />
+<title>TADS DSW</title>
+
+</head>
+<body>
+	<main class="container" layout:fragment="conteudo">
+		<div class="row">
+			<section class="col-md-12">
+				<h1>Cadastro Cliente</h1>
+				<form th:action="@{/cliente/salvar}" method="post"
+					th:object="${cliente}" novalidate>
+
+					<!-- USERNAME -->
+					<div class="form-group row">
+						<label for="txtUsername" class="col-sm-2 col-form-label">Username</label>
+						<div class="col-sm-10">
+							<input type="text" name="username" class="form-control"
+								placeholder="Username">
+							<div class="invalid-feedback">Digite um nome.</div>
+						</div>
+					</div>
+
+					<!-- NOME -->
+					<div class="form-group row">
+						<label for="txtNome" class="col-sm-2 col-form-label">Nome</label>
+						<div class="col-sm-10">
+							<input type="text" name="nome" class="form-control"
+								placeholder="Nome">
+						</div>
+					</div>
+
+					<!-- SENHA -->
+					<div class="form-group row">
+						<label for="txtSenha" class="col-sm-2 col-form-label">Senha</label>
+						<div class="col-sm-10">
+							<input type="password" name="senha" class="form-control"
+								placeholder="Senha">
+						</div>
+					</div>
+
+					<!-- STATUS ATIVAÇÃO -->
+					<fieldset class="form-group">
+						<div class="row">
+							<legend class="col-form-label col-sm-2 pt-0">Satus</legend>
+							<div class="col-sm-10">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="disponivel"
+										id="optDisponivelSim" value="true"> <label
+										class="form-check-label" for="optDisponivelSim"> Sim </label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="disponivel"
+										id="optDisponivelNao" value="false"> <label
+										class="form-check-label" for="optDisponivelNao"> Não </label>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					
+					<!-- CHECKBOX DE PAPEIS -->
+					<fieldset class="form-group">
+						<div class="row">
+							<legend class="col-form-label col-sm-2 pt-0">Papeis</legend>
+							<div class="col-sm-10">
+								<div class="form-check form-check-inline"></div>
+								<input class="form-check-input" type="checkbox"
+									name="idsCategorias"> <label class="form-check-label">
+									TEste </label>
+							</div>
+						</div>
+					</fieldset>
+					
+					<!-- BOTÕES -->
+					<div class="row">
+                        <div class="col-md-3 offset-md-3">
+                            <a  role="button" class="btn btn-block btn-outline-dark">Cancelar</a>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-block btn-success">Enviar</button>
+                        </div>
+                    </div>
+					
+					
+				</form>
+			</section>
+		</div>
+	</main>
+</body>
+</html>
