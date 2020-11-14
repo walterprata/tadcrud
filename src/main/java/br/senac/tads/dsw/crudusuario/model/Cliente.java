@@ -1,14 +1,18 @@
 package br.senac.tads.dsw.crudusuario.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+
+import br.senac.tads.dsw.crudusuario.enums.StatusCliente;
 
 @Entity
 public class Cliente {
@@ -16,28 +20,35 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    
     private String userName;
     private String nome;
     private String senha;
-    private boolean status;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusCliente statusCliente;
     
     @OneToMany
     private List<Papel> papeis = new ArrayList<>();
-    private Date dataCadastro;
+    
+    private String dataCadastro;
 
     public Cliente() {
     }
 
-    public Cliente(Integer id, String userName, String nome, String senha, boolean status, Date dataCadastro) {
-        this.id = id;
-        this.userName = userName;
-        this.nome = nome;
-        this.senha = senha;
-        this.status = status;
-        this.dataCadastro = dataCadastro;
-    }
+	public Cliente(Integer id, String userName, String nome, String senha, StatusCliente statusCliente,
+			String dataCadastro) {
+		super();
+		this.id = id;
+		this.userName = userName;
+		this.nome = nome;
+		this.senha = senha;
+		this.statusCliente = statusCliente;
+		this.dataCadastro = dataCadastro;
+	}
 
-    public Integer getId() {
+	public Integer getId() {
         return id;
     }
 
@@ -69,15 +80,15 @@ public class Cliente {
         this.senha = senha;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
+    public StatusCliente getStatusCliente() {
+		return statusCliente;
+	}
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+	public void setStatusCliente(StatusCliente statusCliente) {
+		this.statusCliente = statusCliente;
+	}
 
-    public List<Papel> getPapeis() {
+	public List<Papel> getPapeis() {
         return papeis;
     }
 
@@ -85,11 +96,11 @@ public class Cliente {
         this.papeis = papeis;
     }
 
-    public Date getDataCadastro() {
+    public String getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
+    public void setDataCadastro(String dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
