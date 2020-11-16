@@ -2,11 +2,14 @@
 package br.senac.tads.dsw.crudusuario.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Papel implements Serializable{
@@ -16,6 +19,9 @@ public class Papel implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String cargo;
+    
+    @ManyToMany(mappedBy = "papeis", fetch = FetchType.LAZY)
+    private List<Cliente> cliente;
 
     public Papel() {
     }
@@ -40,8 +46,17 @@ public class Papel implements Serializable{
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }
+    
+   
+	public List<Cliente> getCliente() {
+		return cliente;
+	}
 
-    @Override
+	public void setCliente(List<Cliente> cliente) {
+		this.cliente = cliente;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 5;
         return hash;

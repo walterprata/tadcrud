@@ -6,9 +6,14 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 
@@ -29,10 +34,16 @@ public class Cliente {
     @Enumerated(EnumType.STRING)
     private StatusCliente statusCliente;
     
-    @OneToMany
-    private List<Papel> papeis = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "PRODUTO_CATEGORIA",
+            joinColumns = @JoinColumn(name="ID_CLIENTE"),
+            inverseJoinColumns = @JoinColumn(name="ID_PAPEL"))
+    private List<Papel> papeis;
     
     private String dataCadastro;
+    
+    private transient List<Integer> idsPapeis;
 
     public Cliente() {
     }
@@ -46,6 +57,7 @@ public class Cliente {
 		this.senha = senha;
 		this.statusCliente = statusCliente;
 		this.dataCadastro = dataCadastro;
+		
 	}
 
 	public Integer getId() {
@@ -102,6 +114,14 @@ public class Cliente {
 
     public void setDataCadastro(String dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+    
+    public List<Integer> getIdsPapeis() {
+        return idsPapeis;
+    }
+
+    public void setIdsCategorias(List<Integer> idsPapeis) {
+        this.idsPapeis = idsPapeis;
     }
 
     @Override

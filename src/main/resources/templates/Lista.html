@@ -1,7 +1,7 @@
 <html layout:decorate="~{modelo}">
 <head>
     <meta charset="UTF-8" />
-    <title>TADS DSW</title>
+    <title>CRUD CLIENTE</title>
     <script th:inline="javascript">
     $(function() {
         $('#deleteModal').on('show.bs.modal', function (event) {
@@ -20,6 +20,9 @@
 </head>
 <body>
     <main class="container" layout:fragment="conteudo">
+       <div th:if="${!#strings.isEmpty(mensagem)}" class="alert alert-success" role="alert">
+       <span th:text="${mensagem}"></span>  
+       </div>
         <h1> TESTE </h1>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <html layout:decorate="~{modelo}">
 <head>
 <meta charset="UTF-8" />
-<title>TADS DSW</title>
+<title>CRUD CLIENTE</title>
 
 </head>
 <body>
@@ -46,23 +46,23 @@
 							<legend class="col-form-label col-sm-2 pt-0">Satus</legend>
 							<div class="col-sm-10">
 								<select class="form-control" name="statusCliente">
-							<option value="ATIVO">ATIVO</option>
-							<option value="DESATIVADO">DESATIVADO</option>
+							<option th:each="statusCliente : ${status}" th:value="${statusCliente}" th:text=${statusCliente.descricao}></option>
+							
                     	</select>
 							</div>
 						</div>
 					</fieldset>
 					
 					<!-- CHECKBOX DE PAPEIS -->
-					
+				
 					  <fieldset class="form-group">
 						<div class="row">
 							<legend class="col-form-label col-sm-2 pt-0">Papeis</legend>
-							<div class="col-sm-10">
-								<div class="form-check form-check-inline"></div>
-								<input class="form-check-input" type="checkbox"
-									name="papeis"> <label class="form-check-label">
-									TEste </label>
+							<div class="col-sm-10"  >
+								<div class="form-check form-check-inline" th:each="papel : ${papeis}" >
+								<input class="form-check-input" type="checkbox"  th:value="${papel.id}"  > 
+								<label class="form-check-label"  th:text=${papel.cargo} >
+									 </label>
 							</div>
 						</div>
 					</fieldset>

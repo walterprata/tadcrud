@@ -2,6 +2,7 @@ package br.senac.tads.dsw.crudusuario;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -24,13 +25,16 @@ public class CrudUsuarioApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         
-            Papel p1 = new Papel(null, "TESTE1");
+    	List<Papel> lista = papelRepository.findAll();
+    	
+    	if(lista.isEmpty()) {
+    		Papel p1 = new Papel(null, "TESTE1");
             Papel p2 = new Papel(null, "TESTE2");
             Papel p3 = new Papel(null, "TESTE3");
             Papel p4 = new Papel(null, "TESTE4");
-        
             papelRepository.saveAll(Arrays.asList(p1,p2,p3,p4));
-        
+    	}
+    	
     }
 
 }
