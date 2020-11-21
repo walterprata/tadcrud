@@ -1,6 +1,5 @@
 package br.senac.tads.dsw.crudusuario.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -11,10 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 
 import br.senac.tads.dsw.crudusuario.enums.StatusCliente;
@@ -26,7 +23,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    
+  
     private String userName;
     private String nome;
     private String senha;
@@ -43,8 +40,7 @@ public class Cliente {
     
     
     private String dataCadastro;
-    
-    private transient List<Integer> idsPapeis;
+
 
     public Cliente() {
     }
@@ -117,19 +113,15 @@ public class Cliente {
         this.dataCadastro = dataCadastro;
     }
     
-    public List<Integer> getIdsPapeis() {
-        return idsPapeis;
-    }
-
-    public void setIdsCategorias(List<Integer> idsPapeis) {
-        this.idsPapeis = idsPapeis;
-    }
-    
 	@Override
     public int hashCode() {
         int hash = 3;
         return hash;
     }
+	
+	public boolean isDesativado() {
+		return StatusCliente.DESATIVADO.equals(this.statusCliente);
+	}
 
     @Override
     public boolean equals(Object obj) {
