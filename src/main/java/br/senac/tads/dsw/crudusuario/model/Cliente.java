@@ -36,10 +36,11 @@ public class Cliente {
     
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "PRODUTO_CATEGORIA",
+            name = "CLIENTE_PAPEL",
             joinColumns = @JoinColumn(name="ID_CLIENTE"),
             inverseJoinColumns = @JoinColumn(name="ID_PAPEL"))
     private List<Papel> papeis;
+    
     
     private String dataCadastro;
     
@@ -123,8 +124,8 @@ public class Cliente {
     public void setIdsCategorias(List<Integer> idsPapeis) {
         this.idsPapeis = idsPapeis;
     }
-
-    @Override
+    
+	@Override
     public int hashCode() {
         int hash = 3;
         return hash;

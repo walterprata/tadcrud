@@ -2,6 +2,7 @@ package br.senac.tads.dsw.crudusuario.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -40,23 +43,24 @@ public class ClienteController {
 		return mv;
 	}
 	
+	
 	@PostMapping(value = "/salvar")
-	public ModelAndView salvar(Cliente cliente, BindingResult bindingResult, RedirectAttributes redirAttr) {
+	public ModelAndView salvar(@ModelAttribute Cliente cliente, @RequestParam(value = "cargo", required = false) Integer[] cargo ,RedirectAttributes redirAttr) {
 		cliente.setDataCadastro(MetodosUtilitarios.getDataHora());
 		
-		List<Papel> lista = papelRepository.findAll();
-		cliente.setPapeis(lista);
+		List<Papel> papeis = new ArrayList<>();
 		
-		if (cliente.getIdsPapeis() != null && !cliente.getIdsPapeis().isEmpty()) {
-            List<Papel> papeisSelecionados = new ArrayList<>();
-            for (Integer idPapel : cliente.getIdsPapeis()) {
-                Papel papel = papelRepository.findById(idPapel).orElse(null);
-                papeisSelecionados.add(papel);
-                papel.setCliente(new ArrayList<>(Arrays.asList(cliente)));
-            }
-            cliente.setPapeis(papeisSelecionados);
-		
-		}
+		if(cargo != null) {
+			for(int i = 0; i <= cargo.length-1; i++) {
+				
+				Papel p = papelRepository.findById(cargo[i]).get();
+				
+				papeis.add(p);
+			}
+			
+			cliente.setPapeis(papeis);
+		} 
+			cliente.setPapeis(Collections.emptyList());
 		
 		ModelAndView mv= new ModelAndView("Lista");
 		clienteRepository.save(cliente);
