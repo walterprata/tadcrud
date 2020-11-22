@@ -8,10 +8,14 @@
 	<main class="container" layout:fragment="conteudo">
 		<div class="row">
 			<section class="col-md-12">
-				<h1>Cadastro Cliente</h1>
+				
 
 				<form th:action="@{/cliente/salvar}" method="post"
 					th:object="${cliente}" novalidate>
+					
+					<h1 th:if="${cliente.id == null}">Cadastro Cliente</h1>
+					<h1 th:if="${cliente.id != null}">Editar Cliente</h1>
+					
 					<div th:if="${!#strings.isEmpty(mensagemError)}"
 						class="alert alert-danger" role="alert">
 						<span th:text="${mensagemError}"></span>
