@@ -8,8 +8,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 import br.senac.tads.dsw.crudusuario.enums.StatusCliente;
 import br.senac.tads.dsw.crudusuario.model.Cliente;
@@ -52,25 +54,34 @@ public class ClienteController {
 	
 	//SALVAR
 	@PostMapping(value = "/salvar")
-	public String salvar( @ModelAttribute Cliente cliente, @RequestParam(value = "cargo[]", required = false) Integer[] cargo, @RequestParam(name="userName") String username ,RedirectAttributes redirAttr) {
-		cliente.setDataCadastro(MetodosUtilitarios.getDataHora());
-		System.out.println("USERNAME = " + username);
-		List<Papel> papeis = new ArrayList<>();
+	public String salvar( @ModelAttribute Cliente cliente, @RequestParam(value = "cargo[]", required = false) Integer[] cargo,
+			RedirectAttributes redirAttr, @RequestParam(value = "userName") String username ) {
 		
-		if(cargo != null) {
-			for(int i = 0; i <= cargo.length-1; i++) {
-				Papel p = papelRepository.findById(cargo[i]).get();
-				papeis.add(p);
-			}
+		try {
+			cliente.setDataCadastro(MetodosUtilitarios.getDataHora());
 			
-			cliente.setPapeis(papeis);
-		} 
+			List<Papel> papeis = new ArrayList<>();
 			
+			if(cargo != null) {
+				for(int i = 0; i <= cargo.length-1; i++) {
+					Papel p = papelRepository.findById(cargo[i]).get();
+					papeis.add(p);
+				}
+				
+				cliente.setPapeis(papeis);
+			} 
+				
+			
+			if(cliente != null) {
+				clienteRepository.save(cliente);
+				redirAttr.addFlashAttribute("mensagem","Cliente salvo com sucesso!");
+			} 
+			
+		}catch(DataIntegrityViolationException e) {
+			redirAttr.addFlashAttribute("mensagemError","O nome de usuário: \"" + username  + "\"" + " já existe!");
+			return "redirect:/cliente/novo";
+		}
 		
-		if(cliente != null) {
-			clienteRepository.save(cliente);
-			redirAttr.addFlashAttribute("mensagem","Cliente salvo com sucesso!");
-		} 
 		
 		return "redirect:/cliente";
 	}

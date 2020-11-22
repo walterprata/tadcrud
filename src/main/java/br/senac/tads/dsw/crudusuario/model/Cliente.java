@@ -2,6 +2,8 @@ package br.senac.tads.dsw.crudusuario.model;
 
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,8 +25,9 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-  
+    @Column(unique = true)
     private String userName;
+    
     private String nome;
     private String senha;
     

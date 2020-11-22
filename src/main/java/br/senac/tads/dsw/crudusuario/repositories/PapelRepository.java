@@ -11,6 +11,10 @@ import br.senac.tads.dsw.crudusuario.model.Papel;
 @Repository
 public interface PapelRepository extends JpaRepository<Papel, Integer>{
 
-	@Query(value = "SELECT * FROM CLIENTE_PAPEL WHERE ID_CLIENTE = ?", nativeQuery = true)
+	@Query(value = "SELECT  papel.id, cargo FROM CLIENTE_PAPEL \r\n"
+			+ "inner join papel on cliente_papel.id_papel = papel.id\r\n"
+			+ "inner join cliente on cliente_papel.id_cliente = cliente.id\r\n"
+			+ "where id_cliente = ?", nativeQuery = true)
+	
 	List<Papel> buscarPapelPorID(Integer id);
 }
