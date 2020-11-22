@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class MetodosUtilitarios {
 
 	public static String getDataHora() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
 		Date data = new Date();  
 		
 		return dateFormat.format(data);
