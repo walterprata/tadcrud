@@ -10,38 +10,53 @@
 			<section class="col-md-12">
 				<h1>Cadastro Cliente</h1>
 				
-				<form th:action="@{/cliente/salvar}" method="post" th:object="${cliente}" >
+				<form th:action="@{/cliente/salvar}" method="post" th:object="${cliente}" novalidate >
 				 <div th:if="${!#strings.isEmpty(mensagemError)}" class="alert alert-danger" role="alert">
 				 <span th:text="${mensagemError}"></span>
-				 </div>				
+				</div>
+			
+				 <div  class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+				 	<div th:each="detailedError : ${#fields.detailedErrors()}">
+				 		<span th:text="${detailedError.message}"></span>
+				 	</div>				
+				</div>
+					<!-- ID -->
+					<input type="hidden" th:field="*{id}">
+					
 					<!-- USERNAME -->
-					<div class="form-group row">
+					<div class="form-group row" >
 						<label for="txtUsername" class="col-sm-2 col-form-label">Username</label>
 						<div class="col-sm-10">
-							<input type="text" th:field="*{userName}"  class="form-control"
+							<input type="text" th:field="*{userName}"  class="form-control" required
 								placeholder="Username" >
 							<div class="invalid-feedback">Digite um nome.</div>
 						</div>
 					</div>
 
 					<!-- NOME -->
-					<div class="form-group row">
+					<div class="form-group row" >
 						<label for="txtNome" class="col-sm-2 col-form-label">Nome</label>
 						<div class="col-sm-10">
-							<input type="text"  th:field="*{nome}" class="form-control"
+							<input type="text"  th:field="*{nome}" class="form-control" required
 								placeholder="Nome">
 						</div>
 					</div>
 
 					<!-- SENHA -->
-					<div class="form-group row">
+					
+					<div class="form-group row" th:hidden="${cliente.senha != null}" >
 						<label for="txtSenha" class="col-sm-2 col-form-label">Senha</label>
 						<div class="col-sm-10">
-							<input type="password" name="senha" class="form-control"
-								placeholder="Senha">
+							
+							<input type="password" name="senha" class="form-control" required="required"
+								placeholder="Senha" th:value="${cliente.senha}" >	
 						</div>
 					</div>
-
+					
+				
+							
+							
+					
 					<!-- STATUS ATIVAÇÃO -->
 					<fieldset class="form-group">
 						<div class="row">

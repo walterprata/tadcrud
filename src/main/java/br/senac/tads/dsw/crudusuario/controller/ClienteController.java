@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,13 +13,14 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,10 +45,13 @@ public class ClienteController {
 	@Autowired
 	PapelRepository papelRepository;
 	
+	private final String CADASTRO_CLIENTE = "CadastroCliente";
+	private final String LISTA = "Lista";
+	
 	//CADASTRO
 	@GetMapping("/novo")
 	public ModelAndView novo() {
-		ModelAndView mv= new ModelAndView("CadastroCliente");
+		ModelAndView mv= new ModelAndView(CADASTRO_CLIENTE);
 		
 		List<Papel> listaPapel = papelRepository.findAll();
 		List<PapelViewModel> papelViewModel = new ArrayList<>();
@@ -61,42 +66,62 @@ public class ClienteController {
 	
 	//SALVAR
 	@PostMapping(value = "/salvar")
-	public String salvar( @ModelAttribute Cliente cliente, @RequestParam(value = "cargo[]", required = false) Integer[] cargo,
-			RedirectAttributes redirAttr, @RequestParam(value = "userName") String username ) {
+	public ModelAndView salvar(  @ModelAttribute @Valid Cliente cliente,Errors error, @RequestParam(value = "cargo[]", required = false) Integer[] cargo,
+			RedirectAttributes redirAttr, @RequestParam(value = "userName") String username) {
+		ModelAndView mv = new ModelAndView("redirect:/cliente/novo");
 		
 		try {
 			cliente.setDataCadastro(MetodosUtilitarios.getDataHora());
 			
+			
+			
+			if(error.hasErrors() || cargo == null ) {
+				
+				List<Papel> listaPapel = papelRepository.findAll();
+				List<PapelViewModel> papelViewModel = new ArrayList<>();
+				
+				listaPapel.forEach( x -> papelViewModel.add(new PapelViewModel(x, false)));
+				mv.addObject("status", StatusCliente.values());
+				mv.addObject("papeis", listaPapel);
+				redirAttr.addFlashAttribute("mensagemError","Todos os campos são obrigatórios!");
+				return mv;
+			}
+			
+			
 			List<Papel> papeis = new ArrayList<>();
 			
-			if(cargo != null) {
+			
 				for(int i = 0; i <= cargo.length-1; i++) {
 					Papel p = papelRepository.findById(cargo[i]).get();
 					papeis.add(p);
 				}
 				
-				cliente.setPapeis(papeis);
-			} 
 				
+				cliente.setPapeis(papeis);
 			
-			if(cliente != null) {
+			
+			
+			if(!Objects.isNull(cliente)) { 
 				clienteRepository.save(cliente);
 				redirAttr.addFlashAttribute("mensagem","Cliente salvo com sucesso!");
-			} 
+				return new ModelAndView("redirect:/cliente");
+			} else {
+				redirAttr.addFlashAttribute("mensagemError","Erro ao salvar cliente!");
+			}
 			
 		}catch(DataIntegrityViolationException e) {
 			redirAttr.addFlashAttribute("mensagemError","O nome de usuário: \"" + username  + "\"" + " já existe!");
-			return "redirect:/cliente/novo";
+			return new ModelAndView("redirect:/cliente/novo");
 		}
 		
 		
-		return "redirect:/cliente";
+		return mv;
 	}
 	
 	//LISTAR CLIENTES
 	@GetMapping
 	public ModelAndView listar() {
-		ModelAndView mv = new ModelAndView("Lista");
+		ModelAndView mv = new ModelAndView(LISTA);
 		List<Cliente> clientes = clienteRepository.findAll();
 		mv.addObject("listaClientes", clientes);
 		return mv;
@@ -124,17 +149,10 @@ public class ClienteController {
 					
 				}
 				
-				 
-//				papelViewModel.forEach(x -> {
-//						boolean selecionado = x.getPapel().getCargo().equals(papel.getCargo());
-//						x.setSelecionado(selecionado);
-//					
-//					});
 			}
 			
 		
-	
-		ModelAndView mv= new ModelAndView("CadastroCliente");
+		ModelAndView mv= new ModelAndView(CADASTRO_CLIENTE);
 		mv.addObject("status", StatusCliente.values());
 		mv.addObject("papeis", papelViewModel);
 		mv.addObject("cliente", cliente);
@@ -144,13 +162,10 @@ public class ClienteController {
 	
 	// REMOVER CLIENTE
 	@PostMapping("/{id}/remover")
-    public ModelAndView remover(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public ModelAndView remover(@PathVariable("id") Integer id, RedirectAttributes redirAttr) {
 		
 		clienteRepository.deleteById(id);
-		
-        
-		redirectAttributes.addFlashAttribute("msgSucesso",
-                "Produto ID " + id + " removido com sucesso");
+		redirAttr.addFlashAttribute("mensagem","Cliente deletado com sucesso!");
         return new ModelAndView("redirect:/cliente");
     }
 

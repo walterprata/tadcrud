@@ -28,10 +28,10 @@ public class CrudUsuarioApplication implements CommandLineRunner {
     	List<Papel> lista = papelRepository.findAll();
     	
     	if(lista.isEmpty()) {
-    		Papel p1 = new Papel(null, "TESTE1");
-            Papel p2 = new Papel(null, "TESTE2");
-            Papel p3 = new Papel(null, "TESTE3");
-            Papel p4 = new Papel(null, "TESTE4");
+    		Papel p1 = new Papel(null, "ADM");
+            Papel p2 = new Papel(null, "PAPEL1");
+            Papel p3 = new Papel(null, "PAPEL2");
+            Papel p4 = new Papel(null, "PAPEL3");
             papelRepository.saveAll(Arrays.asList(p1,p2,p3,p4));
     	}
     	

@@ -14,7 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import br.senac.tads.dsw.crudusuario.enums.StatusCliente;
 
@@ -25,9 +27,14 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
+    @NotBlank(message = "Username é obrigatório!")
+    @Column(unique = true)
     private String userName;
     
+    @NotBlank(message = "Nome é obrigatório!")
     private String nome;
+    
+    @NotBlank
     private String senha;
     
     @Enumerated(EnumType.STRING)
