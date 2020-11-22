@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.senac.tads.dsw.crudusuario.enums.StatusCliente;
 import br.senac.tads.dsw.crudusuario.model.Cliente;
 import br.senac.tads.dsw.crudusuario.model.Papel;
+import br.senac.tads.dsw.crudusuario.model.PapelViewModel;
 import br.senac.tads.dsw.crudusuario.repositories.ClienteRepository;
 import br.senac.tads.dsw.crudusuario.repositories.PapelRepository;
 import br.senac.tads.dsw.crudusuario.utils.MetodosUtilitarios;
@@ -46,8 +49,12 @@ public class ClienteController {
 		ModelAndView mv= new ModelAndView("CadastroCliente");
 		
 		List<Papel> listaPapel = papelRepository.findAll();
+		List<PapelViewModel> papelViewModel = new ArrayList<>();
+		
+		listaPapel.forEach( x -> papelViewModel.add(new PapelViewModel(x, false)));
+		
 		mv.addObject("status", StatusCliente.values());
-		mv.addObject("papeis", listaPapel);
+		mv.addObject("papeis", papelViewModel);
 		mv.addObject("cliente", new Cliente());
 		return mv;
 	}
@@ -102,10 +109,34 @@ public class ClienteController {
 		List<Papel> papeis = papelRepository.buscarPapelPorID(id);
 		List<Papel> list = papelRepository.findAll();
 		
+		List<PapelViewModel> papelViewModel = new ArrayList<>();
+		
+		
+		list.forEach( x -> papelViewModel.add(new PapelViewModel(x, false)));
+		
+		
+			for(Papel papel : papeis) {
+				for(PapelViewModel pvm : papelViewModel) {
+					boolean selecionado = pvm.getPapel().getCargo().equals(papel.getCargo());
+					if(selecionado) {
+						pvm.setSelecionado(selecionado);
+					}
+					
+				}
+				
+				 
+//				papelViewModel.forEach(x -> {
+//						boolean selecionado = x.getPapel().getCargo().equals(papel.getCargo());
+//						x.setSelecionado(selecionado);
+//					
+//					});
+			}
 			
+		
+	
 		ModelAndView mv= new ModelAndView("CadastroCliente");
 		mv.addObject("status", StatusCliente.values());
-		mv.addObject("papeis", papeis);
+		mv.addObject("papeis", papelViewModel);
 		mv.addObject("cliente", cliente);
 		
 		return mv;

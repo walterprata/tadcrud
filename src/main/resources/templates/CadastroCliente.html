@@ -45,7 +45,7 @@
 					<!-- STATUS ATIVAÇÃO -->
 					<fieldset class="form-group">
 						<div class="row">
-							<legend class="col-form-label col-sm-2 pt-0">Satus</legend>
+							<legend class="col-form-label col-sm-2 pt-0">Status</legend>
 							<div class="col-sm-10">
 								<select class="form-control" th:field="*{statusCliente}">
 							<option th:each="statusCliente : ${status}" th:value="${statusCliente}" th:text=${statusCliente.descricao}></option>
@@ -61,9 +61,9 @@
 						<div class="row">
 							<legend class="col-form-label col-sm-2 pt-0">Papeis</legend>
 							<div class="col-sm-10"  >
-								<div class="form-check form-check-inline" th:each="papel : ${papeis}" >
-								<input class="form-check-input" type="checkbox" th:value="${papel.id}"  name="cargo[]"  > 
-								<label class="form-check-label"  th:text=${papel.cargo} >
+								<div class="form-check form-check-inline" th:each="viewModel : ${papeis}" >
+								<input class="form-check-input" type="checkbox" th:value="${viewModel.papel.id}"  name="cargo[]" th:checked="${viewModel.selecionado}"  > 
+								<label class="form-check-label"  th:text=${viewModel.papel.cargo} >
 									 </label>
 							</div>
 						</div>

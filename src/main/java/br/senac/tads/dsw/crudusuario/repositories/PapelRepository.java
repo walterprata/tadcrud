@@ -15,6 +15,5 @@ public interface PapelRepository extends JpaRepository<Papel, Integer>{
 			+ "inner join papel on cliente_papel.id_papel = papel.id\r\n"
 			+ "inner join cliente on cliente_papel.id_cliente = cliente.id\r\n"
 			+ "where id_cliente = ?", nativeQuery = true)
-	
 	List<Papel> buscarPapelPorID(Integer id);
 }
